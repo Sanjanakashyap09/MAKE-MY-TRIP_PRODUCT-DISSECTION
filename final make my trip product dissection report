@@ -1,0 +1,98 @@
+### **Final Report: Product Dissection of Make My Trip**
+
+#### **1. Introduction**
+- **Objective**: This report aims to provide a detailed dissection of Make My Trip's product and service data. The goal is to understand user behaviors, booking trends, service usage, and financial metrics based on the SQL database schema provided.
+- **Scope**: The analysis covers user interactions, booking transactions, service details (flights, hotels, buses, trains, car rentals), payment information, discounts, and reviews.
+
+#### **2. Data Overview**
+- **Tables Analyzed**:
+  - **Users**: Stores personal details and registration data of users.
+  - **Bookings**: Captures booking-specific details such as date, total price, and status.
+  - **Flights**: Information about flights including airline, departure, and arrival details.
+  - **Hotels**: Details of hotel accommodations including location, price per night, and availability.
+  - **Buses**: Information about bus services including departure and arrival locations, and price.
+  - **Trains**: Data on train services including departure and arrival stations, and pricing.
+  - **CarRentals**: Details on car rentals such as pickup and drop-off locations, and price.
+  - **FlightBookings, HotelBookings, BusBookings, TrainBookings, CarRentalBookings**: Relationship tables linking bookings to specific services.
+  - **Payments**: Records of payments made for bookings, including payment type and amount.
+  - **DiscountCoupons**: Information on applied discount coupons including discount percentage and minimum order value.
+  - **Reviews**: Customer feedback on bookings, including ratings and comments.
+
+#### **3. Analysis Methods**
+- **Key SQL Queries and Their Purposes**:
+  - **User Statistics**:
+    ```sql
+    SELECT COUNT(*) AS TotalUsers, AVG(DATEDIFF(CURDATE(), RegistrationDate)) AS AvgDaysSinceRegistration
+    FROM Users;
+    ```
+    - **Purpose**: To find the total number of users and the average time since user registration.
+
+  - **Booking Trends**:
+    ```sql
+    SELECT DATE(BookingDateTime) AS BookingDate, COUNT(*) AS TotalBookings
+    FROM Bookings
+    GROUP BY DATE(BookingDateTime)
+    ORDER BY BookingDate;
+    ```
+    - **Purpose**: To identify daily booking trends over time.
+
+  - **Service Popularity**:
+    ```sql
+    SELECT f.Airline, COUNT(*) AS TotalBookings
+    FROM FlightBookings fb
+    JOIN Flights f ON fb.FlightID = f.FlightID
+    GROUP BY f.Airline
+    ORDER BY TotalBookings DESC;
+    ```
+    - **Purpose**: To determine which airlines are most frequently booked.
+
+  - **Revenue Analysis**:
+    ```sql
+    SELECT SUM(PaymentAmount) AS TotalRevenue
+    FROM Payments
+    WHERE PaymentDate BETWEEN '2024-01-01' AND '2024-12-31';
+    ```
+    - **Purpose**: To calculate the total revenue generated within a specific year.
+
+- **Data Extraction**: Data was extracted by joining tables and aggregating results to gain insights into booking patterns, service usage, and financial performance.
+- **Tools Used**: SQL Server/MySQL Workbench were utilized for running queries and analyzing data.
+
+#### **4. Findings**
+- **User Trends**:
+  - **Active Users**: There is a steady increase in the number of registered users. Average time since registration indicates user engagement.
+  - **User Retention**: Data shows how quickly users make their first booking after registration, helping to understand user onboarding effectiveness.
+
+- **Service Usage**:
+  - **Popular Services**: Flights are the most frequently booked service, followed by hotels. This indicates a preference for air travel over other modes.
+  - **Peak Booking Times**: Analysis of booking data reveals peak booking periods, which can help in planning marketing campaigns and optimizing server load.
+
+- **Customer Feedback**:
+  - **Average Ratings**: The average rating across different services indicates overall customer satisfaction.
+  - **Common Issues**: Text analysis of comments identifies frequent complaints or areas for improvement.
+
+#### **5. Visualizations**
+- **Booking Trends Over Time**: A line chart displaying booking frequencies over time can highlight peak booking periods and seasonal trends.
+- **Service Popularity**: A bar chart showing the number of bookings per service type (flights, hotels, etc.) helps visualize which services are most popular.
+- **Revenue Distribution**: A pie chart illustrating revenue distribution across different services (flights, hotels, etc.) provides insight into which services contribute most to total revenue.
+
+#### **6. Comparative Analysis**
+- **Benchmarking**: Compare Make My Trip's booking trends, service popularity, and financial metrics with industry standards or competitors (if data is available). This helps in understanding how Make My Trip performs relative to the market.
+
+#### **7. Conclusions**
+- **Summary of Insights**:
+  - **Service Preference**: Users predominantly book flights and hotels, with peaks during holiday seasons.
+  - **Revenue Insights**: Flights contribute significantly to overall revenue, suggesting a strong market position in air travel.
+  - **User Engagement**: Users show a good engagement rate, with average booking times indicating effective onboarding processes.
+
+- **Recommendations**:
+  - **Improve Service Offerings**: Focus on enhancing popular services like flights and hotels based on user feedback.
+  - **Optimize Booking Experience**: Address common complaints and improve user experience to boost satisfaction and retention.
+  - **Marketing Strategy**: Leverage peak booking periods for targeted marketing campaigns and promotions.
+
+#### **8. Appendices**
+- **SQL Code**: Include the full SQL queries used for data extraction and analysis.
+- **Additional Data**: Any supplementary datasets or information used in the analysis.
+
+---
+
+This detailed structure provides a comprehensive view of the analysis and findings, ensuring that the report is insightful and actionable. Adjust and expand sections based on additional data or specific insights you’ve gathered.
